@@ -1,0 +1,62 @@
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath "gradle.plugin.com.github.jengelman.gradle.plugins:shadow:7.0.0"
+    }
+}
+
+plugins {
+    id "java"
+    id "com.google.cloud.tools.jib" version "2.5.0"
+    id "idea"
+    id "eclipse"
+    id "com.github.davidmc24.gradle.plugin.avro" version "1.5.0"
+}
+
+sourceCompatibility = JavaVersion.VERSION_17
+targetCompatibility = JavaVersion.VERSION_17
+version = "0.0.1"
+
+repositories {
+    mavenCentral()
+
+    maven {
+        url "https://packages.confluent.io/maven"
+    }
+}
+
+apply plugin: "com.github.johnrengelman.shadow"
+
+dependencies {
+    implementation "org.apache.avro:avro:1.11.0"
+    implementation "org.slf4j:slf4j-simple:1.7.30"
+    implementation "org.apache.kafka:kafka-streams:<AK-VERSION>"
+    implementation "io.confluent:kafka-streams-avro-serde:<CP-VERSION>"
+    testImplementation "org.apache.kafka:kafka-streams-test-utils:<AK-VERSION>"
+    testImplementation "junit:junit:4.13"
+    testImplementation 'org.hamcrest:hamcrest:2.2'
+}
+
+test {
+    testLogging {
+        outputs.upToDateWhen { false }
+        showStandardStreams = true
+        exceptionFormat = "full"
+    }
+}
+
+jar {
+  manifest {
+    attributes(
+      "Class-Path": configurations.compileClasspath.collect { it.getName() }.join(" "),
+      "Main-Class": "io.confluent.developer.<MAIN-CLASS>"
+    )
+  }
+}
+
+shadowJar {
+    archiveBaseName = "<TUTORIAL-SHORT-NAME>-standalone"
+    archiveClassifier = ''
+}

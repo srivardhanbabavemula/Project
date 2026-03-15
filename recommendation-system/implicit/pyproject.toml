@@ -1,0 +1,41 @@
+[tool.black]
+
+line-length = 100
+
+[build-system]
+requires = [
+    "setuptools>=42",
+    "wheel",
+    "scikit-build>=0.13.1",
+    "Cython>=0.24",
+    "scipy>=0.16",
+    "cmake>=3.18",
+    "ninja"
+]
+build-backend = "setuptools.build_meta"
+
+[tool.cibuildwheel]
+# skip testing in the cibuildwheel phase, will install the wheels later
+# and verify
+test-command = ""
+skip = ["pp*", "*musl*",  "*-manylinux_i686", "*win32"]
+
+[[tool.cibuildwheel.overrides]]
+select = "*-manylinux_x86_64*"
+before-all = "ci/install_cuda.sh"
+
+# auditwheel includes cuda libraries, just skip it
+[tool.cibuildwheel.linux]
+repair-wheel-command = ""
+
+[tool.cibuildwheel.linux.environment]
+CUDACXX = "/usr/local/cuda/bin/nvcc"
+
+# Build `universal2` and `arm64` wheels on an Intel runner.
+# Note that the `arm64` wheel and the `arm64` part of the `universal2`
+# wheel cannot be tested in this configuration.
+[tool.cibuildwheel.macos]
+archs = ["x86_64", "universal2", "arm64"]
+
+[tool.pytest.ini_options]
+filterwarnings = ['ignore::implicit.utils.ParameterWarning']

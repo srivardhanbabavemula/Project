@@ -1,0 +1,5 @@
+Since the output of our transient queries looks right, the next step is to make the queries persistent with the following statements. Go ahead and run the following six commands in your Flink SQL session:
+
++++++
+<pre class="snippet"><code class="sql">{% include_raw tutorials/splitting/flinksql/code/tutorial-steps/dev/create-acting-events-drama.sql %}</code></pre>
++++++

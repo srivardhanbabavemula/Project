@@ -1,0 +1,124 @@
+answer:
+  steps:
+    - title:
+      content:
+        - action: skip
+          render:
+            file: tutorials/console-consumer-producer-avro/kafka/markup/answer/produce.adoc
+    - title:
+      content:
+        - action: skip
+          render:
+            file: tutorials/console-consumer-producer-avro/kafka/markup/answer/consume.adoc
+
+dev:
+  steps:
+    - title: Prerequisites
+      content:
+        - action: skip
+          render:
+            file: shared/markup/dev/docker-prerequisite.adoc
+
+    - title: Initialize the project
+      content:
+        - action: execute
+          file: tutorial-steps/dev/init.sh
+          render:
+            file: tutorials/console-consumer-producer-avro/kafka/markup/dev/init.adoc
+
+    - title: Get Confluent Platform
+      content:
+        - change_directory: console-consumer-producer-avro
+          action: make_file
+          file: docker-compose.yml
+          render:
+            file: tutorials/console-consumer-producer-avro/kafka/markup/dev/make-docker-compose.adoc
+
+        - action: execute_async
+          file: tutorial-steps/dev/docker-compose-up.sh
+          render:
+            file: tutorials/console-consumer-producer-avro/kafka/markup/dev/start-compose.adoc
+
+        - action: execute
+          file: tutorial-steps/dev/wait-for-containers.sh
+          render:
+            skip: true
+
+    - title: Create the Kafka topic
+      content:
+        - action: execute
+          file: tutorial-steps/dev/create-topic.sh
+          render:
+            file: tutorials/console-consumer-producer-avro/kafka/markup/dev/create-topic.adoc
+
+    - title: Create a schema for your records
+      content:
+        - action: make_file
+          file: orders-avro-schema.json
+          render:
+            file: tutorials/console-consumer-producer-avro/kafka/markup/dev/create-schema.adoc
+            
+    - title: Start a console consumer
+      content:
+        - action: execute_async
+          file: tutorial-steps/dev/harness-console-consumer.sh
+          stdout: tutorial-steps/dev/outputs/actual-output-step-one.txt
+          render:
+            file: tutorials/console-consumer-producer-avro/kafka/markup/dev/consume-topic.adoc
+
+    - title: Produce your first records
+      content:
+        - action: execute
+          file: tutorial-steps/dev/harness-console-producer.sh
+          stdin: tutorial-steps/dev/records.txt
+          render:
+            file: tutorials/console-consumer-producer-avro/kafka/markup/dev/produce-topic.adoc
+
+        - name: wait for consumer to read records
+          action: sleep
+          ms: 5000
+          render:
+            skip: true
+            
+    - title: Produce records with full key-value pairs
+      content:
+      - action: execute
+        file: tutorial-steps/dev/harness-console-producer-keys.sh
+        stdin: tutorial-steps/dev/input-step-three.txt
+        render:
+         file: tutorials/console-consumer-producer-avro/kafka/markup/dev/produce-topic-keys-values.adoc
+
+    - title: Start a consumer to show full key-value pairs
+      content:
+      - action: execute_async
+        file: tutorial-steps/dev/harness-console-consumer-keys.sh
+        stdout: tutorial-steps/dev/outputs/actual-output-step-three.txt
+        render:
+          file: tutorials/console-consumer-producer-avro/kafka/markup/dev/consume-topic-key-value.adoc
+
+      - name: wait for consumer to read records
+        action: sleep
+        ms: 5000
+        render:
+          skip: true
+
+    - title: Clean Up
+      content:
+      - action: execute
+        file: tutorial-steps/dev/clean-up.sh
+        render:
+          file: tutorials/console-consumer-producer-avro/kafka/markup/dev/clean-up.adoc
+
+ccloud:
+  steps:
+    - title: Run your app with Confluent Cloud
+      content:
+        - action: skip
+          render:
+            file: shared/markup/ccloud/try-ccloud.adoc
+
+    - title: See other documentation
+      content:
+        - action: skip
+          render:
+            file: tutorials/console-consumer-producer-avro/kafka/markup/ccloud/doc-out.adoc

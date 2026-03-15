@@ -1,0 +1,20 @@
+
+<TUTORIAL-SHORT-NAME>:
+  title: "I NEED TO BE UPDATED"
+  meta-description: "I NEED TO BE UPDATED"
+  slug: "/<PERMALINK>"
+  question: "I NEED TO BE UPDATED"
+  introduction: "I NEED TO BE UPDATED"
+  status:
+    confluent: disabled
+    ksql: <KSQL-ENABLED>
+    kstreams: <KSTREAMS-ENABLED>
+    kafka: disabled
+    c: disabled
+    go: disabled
+    groovy: disabled
+    nodejs: disabled
+    python: disabled
+    ruby: disabled
+    scala: disabled
+    swift: disabled

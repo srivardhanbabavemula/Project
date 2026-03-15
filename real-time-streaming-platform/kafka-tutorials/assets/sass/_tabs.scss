@@ -1,0 +1,64 @@
+@import "_vars";
+
+.cflt-tabs {
+  .button {
+    &.is-selected {
+      background-color: $color_denim;
+      color: $color_white;
+      font-weight: 500;
+    }
+
+    &:not(.is-selected):hover {
+      background: rgba(171, 200, 231, .1);
+    }
+
+    border-radius: 4px;
+    border: solid 1px $color_denim;
+    background-color: $color_white;
+    color: $color_denim;
+    font-size: 18px;
+    font-weight: 300;
+    width: 192px;
+  }
+}
+
+.cflt-options {
+  display: none;
+  background: $color_denim;
+  padding: 5px;
+  border-radius: 4px;
+  position: relative;
+
+  &:after {
+    content: "▼";
+    top: 50%;
+    transform: translateY(-50%);
+    position: absolute;
+    pointer-events: none;
+    color: $color_white;
+    right: 10px;
+  }
+
+  select {
+    background: $color_denim;
+    border: 0;
+    color: $color_white;
+    width: 100%;
+    font-size: 18px;
+    font-weight: 500;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    text-indent: 1px;
+    text-overflow: '';
+  }
+}
+
+@media screen and (max-width: 640px) {
+  .cflt-options {
+    display: block;
+  }
+
+  .cflt-tabs {
+    display: none;
+  }
+}

@@ -1,0 +1,8 @@
+HTTP/1.1 201 Created
+Date: Tue, 18 Jul 2023 17:10:11 GMT
+Location: http://localhost:8083/connectors/fleet_location
+Content-Type: application/json
+Content-Length: 538
+Server: Jetty(9.4.48.v20220622)
+
+{"name":"fleet_location","config":{"connector.class":"io.confluent.kafka.connect.datagen.DatagenConnector","quickstart":"fleet_mgmt_location","schema.keyfield":"vehicle_id","kafka.topic":"fleet_mgmt_location","key.converter":"org.apache.kafka.connect.converters.IntegerConverter","value.converter":"io.confluent.connect.avro.AvroConverter","value.converter.schema.registry.url":"http://schema-registry:8081","value.converter.schemas.enable":"false","max.interval":"500","tasks.max":"1","name":"fleet_location"},"tasks":[],"type":"source"}

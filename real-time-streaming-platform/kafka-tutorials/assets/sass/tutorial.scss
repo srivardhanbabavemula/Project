@@ -1,0 +1,257 @@
+@import "_tabs";
+
+.pg-tutorial {
+  background: $color_white;
+
+  .section {
+    padding: 35px 0 0 0;
+
+    .tutorial-section-title {
+      font-size: 35px;
+    }
+
+    .paragraph p {
+      word-break: break-word;
+    }
+
+    .tutorial-section-item-title {
+      font-size: 28px;
+      margin-top: 20px;
+    }
+
+    .example-image {
+      float: right;
+      margin-left: 25px;
+      width: 436px;
+      height: 100%;
+
+      @include for-max-mobile {
+        display: none;
+      }
+    }
+  }
+
+  .btn-edit {
+    width: 50px;
+    position: absolute;
+    top: -59px;
+    right: 0;
+
+    img {
+      width: 50px;
+    }
+  }
+
+  .summary {
+    @include text;
+    color: $color_white;
+
+    h2 {
+      font-size: 18px;
+      font-weight: bold;
+      margin-bottom: 5px;
+    }
+
+    p {
+      font-weight: 400;
+    }
+  }
+
+  .tutorial-try-it-step p {
+    @include p;
+  }
+
+  .tutorial-markup .section:first-of-type {
+    padding-top: 0;
+  }
+
+  .hero {
+    min-height: 265px;
+    padding-top: 0;
+
+    .hero-body {
+      padding-top: 0;
+      padding-bottom: 0;
+      display: flex;
+      align-items: center;
+
+      > .container {
+        margin: 20px auto;
+      }
+
+      .launch-container {
+        padding: 0;
+
+        .tutorial-try-it-step {
+          .subtitle {
+            color: $color_white;
+            margin-left: 0;
+          }
+        }
+      }
+
+      .community-contribution {
+        font-size: 0.75rem;
+        background: $color_white;
+        color: $color_dimGray;
+        border-radius: 6px;
+        padding: 2px 1px 2px 5px;
+        line-height: 2.5rem;
+        font-weight: 900;
+        text-transform: uppercase;
+      }
+    }
+  }
+
+  .headline {
+    margin-bottom: 30px;
+  }
+
+  .example {
+    margin-bottom: 20px;
+
+    .example-content {
+      display: flex;
+      flex-direction: row;
+
+      @include for-max-mobile {
+        flex-direction: column;
+
+        .image {
+          display: inline-block;
+          margin-left: 0;
+          width: 100%;
+          height: 100%;
+        }
+      }
+    }
+
+    .text {
+      font-size: 1rem;
+      font-weight: 400;
+      color: $color_black;
+      line-height: 1.5;
+    }
+
+    .image {
+      display: none;
+    }
+  }
+
+  h4.subtitle {
+    margin: 0 0 5px -32px;
+    color: $color_black;
+    font-weight: normal;
+    font-size: 21px;
+
+    .text {
+      display: inline-block;
+      vertical-align: middle;
+    }
+  }
+
+  .content-item {
+    display: flex;
+    flex-direction: row;
+
+    .num {
+      min-width: 26px;
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      background: $color_denim;
+      text-align: center;
+      font-size: 18px;
+      color: $color_white;
+      font-weight: bold;
+      padding-top: 0;
+      display: inline-block;
+      margin-right: 8px;
+      position: relative;
+      top: -2px;
+    }
+  }
+
+  .tutorial-try-it-step {
+    margin: 0;
+
+    .subtitle {
+      padding-bottom: 15px;
+      display: flex;
+    }
+  }
+
+  .tutorial-navigation {
+    display: inline-block;
+    margin-bottom: 0;
+
+    li {
+      margin-left: 0;
+      list-style-type: none;
+    }
+
+    > li > a {
+      @include title;
+      font-weight: 550;
+      line-height: 1.5;
+    }
+
+    ul {
+      margin-bottom: 10px;
+      margin-top: 10px;
+
+      a {
+        @include text;
+        color: $color_academy;
+        line-height: 1.69;
+        font-weight: 400;
+
+        &:hover {
+          color: $color_midnight;
+        }
+      }
+    }
+  }
+
+  .tutorial-media-container {
+    margin-top: 60px;
+
+    .image {
+      position: relative;
+      height: 0;
+      overflow: hidden;
+      padding-bottom: 50%;
+
+      iframe {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+      }
+    }
+  }
+
+  @media screen and (max-width: 640px) {
+    .tutorial-media-container {
+      margin-top: 20px;
+    }
+
+    h4.subtitle,
+    .tutorial-try-it-step {
+      margin-left: 0;
+    }
+  }
+
+  .tutorial-missing {
+    padding: 0;
+
+    .snippet-wrapper {
+      margin: 0;
+
+      .snippet {
+        padding: 20px 0;
+      }
+    }
+  }
+}

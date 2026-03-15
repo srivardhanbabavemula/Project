@@ -1,0 +1,15 @@
+Key     (4 bytes):
+Payload (11 bytes):	{"vehicle_id": 5712, "engine_temperature": 172, "average_rpm": 2359}
+--
+Key     (4 bytes):
+Payload (11 bytes):	{"vehicle_id": 2255, "engine_temperature": 195, "average_rpm": 2444}
+--
+Key     (4 bytes):
+Payload (11 bytes):	{"vehicle_id": 5973, "engine_temperature": 233, "average_rpm": 2194}
+--
+Key     (4 bytes):
+Payload (12 bytes):	{"vehicle_id": 8429, "engine_temperature": 194, "average_rpm": 4729}
+--
+Key     (4 bytes):
+Payload (11 bytes):	{"vehicle_id": 2816, "engine_temperature": 180, "average_rpm": 3598}
+--

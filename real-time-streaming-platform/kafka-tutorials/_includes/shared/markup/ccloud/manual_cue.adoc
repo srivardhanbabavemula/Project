@@ -1,0 +1,1 @@
+If you are you not running source connectors to produce events, you can use ksqlDB `INSERT INTO` statements to insert mock data into the source topics:

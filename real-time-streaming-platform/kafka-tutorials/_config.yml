@@ -1,0 +1,43 @@
+title: "Kafka Tutorials: Learn Kafka and Stream Processing with Examples"
+description: "The largest collection of Apache Kafka tutorials with end-to-end code examples for all use cases. Learn to use Kafka and ksqlDB from the experts at Confluent Developer."
+url: "https://developer.confluent.io/tutorials"
+
+github_url: https://github.com/confluentinc/kafka-tutorials
+contribute_url: https://github.com/confluentinc/kafka-tutorials/blob/master/CONTRIBUTING.md
+
+twitter_username: confluentinc
+github_username: confluentinc
+
+markdown: kramdown
+
+sass:
+  load_paths:
+    - assets/sass
+    - node_modules
+
+exclude:
+  - node_modules/
+  - docker/
+  - Gemfile
+  - Gemfile.lock
+  - README.md
+  - package.json
+  - package-lock.json
+  - Makefile
+  - harness_runner
+  - LICENSE
+  - CONTRIBUTING.md
+  - templates/
+  - tools/
+
+ak_javadoc_version: 23
+cp_version: v5.3.0
+google_tag_manager_id: GTM-M58HDC6
+
+plugins:
+  - jekyll-asciidoc
+  - jekyll-last-modified-at
+
+asciidoctor:
+  attributes:
+    - icons=font

@@ -1,0 +1,9 @@
+Key     (4 bytes):
+Payload (29 bytes):	{"vehicle_id": 6242, "location": {"latitude": 0.6188530445835535, "longitude": 0.53424204571321932}, "ts": 1609459200000}
+--
+Key     (4 bytes):
+Payload (29 bytes):	{"vehicle_id": 2956, "location": {"latitude": 0.38269701406096923, "longitude": 0.92006741132971748}, "ts": 1609459300000}
+--
+Key     (4 bytes):
+Payload (29 bytes):	{"vehicle_id": 7982, "location": {"latitude": 0.35200846940237418, "longitude": 0.90592937818464314}, "ts": 1609459400000}
+--

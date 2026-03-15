@@ -1,0 +1,7 @@
+floris
+dash
+pandas
+gunicorn
+vtk
+dash-vtk
+pyproj~=2.1

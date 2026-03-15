@@ -1,0 +1,300 @@
+---
+---
+
+<!DOCTYPE html>
+<html>
+  <head>
+    {% include vendors.html %}
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="{{ site.description }}">
+    <meta class="swiftype" name="site-id" data-type="integer" content="3" />
+    <meta class="swiftype" name="docs-boost" data-type="integer" content="6" />
+    <title>{{ site.title }}</title>
+    <link rel="stylesheet" href="{{ "/assets/sass/fonts.css" | relative_url }}" />
+    <link rel="stylesheet" href="{{ "/assets/sass/main.css" | relative_url }}" />
+    <link rel="preconnect" href="https://developer.confluent.io" crossorigin/>
+    <link rel="preconnect" href="https://reveal.clearbit.com" crossorigin/>
+    <link rel="preload" as="image" type='image/svg+xml' href="https://developer.confluent.io/images/developer-logo.svg" />
+    <script src="https://reveal.clearbit.com/v1/companies/reveal?authorization=pk_3b8bb5ef85b03b3e0d9bd2165914fee4&variable=reveal"></script>
+    <script src="https://cdn.optimizely.com/js/15784060578.js"></script>
+    <script>
+      !function(){var analytics=window.analytics=window.analytics||[];if(!analytics.initialize)if(analytics.invoked)window.console&&console.error&&console.error("Segment snippet included twice.");else{analytics.invoked=!0;analytics.methods=["trackSubmit","trackClick","trackLink","trackForm","pageview","identify","reset","group","track","ready","alias","debug","page","once","off","on","addSourceMiddleware","addIntegrationMiddleware","setAnonymousId","addDestinationMiddleware"];analytics.factory=function(e){return function(){var t=Array.prototype.slice.call(arguments);t.unshift(e);analytics.push(t);return analytics}};for(var e=0;e<analytics.methods.length;e++){var key=analytics.methods[e];analytics[key]=analytics.factory(key)}analytics.load=function(key,e){var t=document.createElement("script");t.type="text/javascript";t.async=!0;t.src="https://cdn.segment.com/analytics.js/v1/" + key + "/analytics.min.js";var n=document.getElementsByTagName("script")[0];n.parentNode.insertBefore(t,n);analytics._loadOptions=e};analytics._writeKey="az10o8Nrc5rgWtPla1QHrg1rTjPdYFV6";analytics.SNIPPET_VERSION="4.13.2";
+      analytics.load("az10o8Nrc5rgWtPla1QHrg1rTjPdYFV6");
+      analytics.page();
+      }}();
+    </script>
+    <script src="assets/js/feedback.js"></script>
+  </head>
+  <body class="pg-main">
+    {% include nav.html %}
+
+    {% include feedback-button.html %}
+
+    <section class="hero">
+      <div class="hero-body">
+        <div class="container">
+          <div class="headline">
+            <h1>
+              Say Hello World to Stream Processing
+            </h1>
+            <h2 class="subtitle">From Idea to Proof-of-concept: Learn Apache Kafka® and Apache Flink® fundamentals quickly with our functional tutorials, then explore the most popular stream processing use cases with recipes powered by ksqlDB so you can take immediate action, 100% in the cloud. <a href="https://www.confluent.io/confluent-cloud/tryfree/">Get started here</a></h2>
+            <div class="ctas">
+                <a href="{{ "/index.html" | relative_url }}" class="btn-midnight-white-outline">Concepts</a>
+                <a href="{{ "/use-cases.html" | relative_url }}" class="btn-midnight">Use Case Recipes</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="cards-container">
+
+      <div class="cards">
+
+        <div class="card">
+          <div class="title">
+            <img src="{{ "/assets/img/icon-flink.png" | relative_url }}" />
+            <div>Flink SQL</div>
+            <!-- Building event streaming applications with Flink SQL-->
+          </div>
+           <ul>
+            <li><a href="{{ "/create-stateful-aggregation-count/flinksql.html" | relative_url }}">Aggregations: counting</a></li>
+            <li><a href="{{ "/create-stateful-aggregation-minmax/flinksql.html" | relative_url }}">Aggregations: min-max</a></li>
+            <li><a href="{{ "/join-a-stream-to-a-stream/flinksql.html" | relative_url }}">Temporal joins</a></li>
+            <li><a href="{{ "/filter-a-stream-of-events/flinksql.html" | relative_url }}">Filtering</a></li>
+            <li><a href="{{ "/create-tumbling-windows/flinksql.html" | relative_url }}">Tumbling windows</a></li>
+            <li><a href="{{ "/create-hopping-windows/flinksql.html" | relative_url }}">Hopping windows</a></li>
+            <li><a href="{{ "/create-cumulating-windows/flinksql.html" | relative_url }}">Cumulating windows</a></li>
+            <li><a href="{{ "/split-a-stream-of-events-into-substreams/flinksql.html" | relative_url }}">Splitting event streams</a></li>
+            <li><a href="{{ "/finding-distinct-events/flinksql.html" | relative_url }}">Deduplication</a></li>
+          </ul>
+        </div>
+
+        <div class="card">
+          <div class="title">
+            <img src="{{ "/assets/img/icon-atom.svg" | relative_url }}" />
+            <div>Build Applications</div>
+            <!-- Building event-driven applications with best practices like callbacks and exception handling -->
+          </div>
+          <ul>
+            <li><a href="{{ "/creating-first-apache-kafka-producer-application/confluent.html" | relative_url }}">Your first Kafka producer application</a></li>
+            <li><a href="{{ "/creating-first-apache-kafka-consumer-application/confluent.html" | relative_url }}">Your first Kafka consumer application</a></li>
+            <li><a href="{{ "/creating-first-apache-kafka-streams-application/confluent.html" | relative_url }}">Your first Kafka Streams application</a></li>
+            <li><a href="{{ "/kafka-producer-callback-application/confluent.html" | relative_url }}">Callbacks</a></li>
+            <li><a href="{{ "/error-handling/confluent.html" | relative_url }}">Uncaught Exceptions</a></li>
+            <li><a href="{{ "/optimize-producer-throughput/confluent.html" | relative_url }}">Optimize producer for throughput</a></li>
+            <li><a href="{{ "/confluent-parallel-consumer/confluent.html" | relative_url }}">The Confluent Parallel Consumer</a></li>
+            <li><a href="{{ "/produce-consume-lang/scala.html" | relative_url }}">Non-Java client applications</a></li>
+          </ul>
+        </div>
+
+        <div class="card">
+          <div class="title">
+            <img src="{{ "/assets/img/icon-cluster.svg" | relative_url }}" />
+            <div>Kafka topics</div>
+            <!-- Working with Apache Kafka topics and related configurations -->
+          </div>
+          <ul>
+            <li><a href="{{ "/how-to-count-messages-on-a-kafka-topic/confluent.html" | relative_url }}">Count the number of messages</a></li>
+            <li><a href="{{ "/change-topic-partitions-replicas/ksql.html" | relative_url }}">Update partitions and replicas</a></li>
+            <li><a href="{{ "/message-ordering/kafka.html" | relative_url }}">Maintain message ordering</a></li>
+            <li><a href="{{ "/multiple-event-type-topics/confluent.html" | relative_url }}">Multiple event types in a single topic</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- END cards -->
+      <div class="cards secondary-card-row">
+
+       <div class="card">
+          <div class="title">
+            <img src="{{ "/assets/img/icon-stream.svg"  | relative_url }}" />
+            <div>Route Events</div>
+            <!-- Deciding where to send events, splitting, merging, and filtering streams -->
+          </div>
+          <ul>
+            <li><a href="{{ "/split-a-stream-of-events-into-substreams/confluent.html" | relative_url }}">Split a stream into substreams</a></li>
+            <li><a href="{{ "/merge-many-streams-into-one-stream/confluent.html" | relative_url }}">Merge many streams into one</a></li>
+            <li><a href="{{ "/dynamic-output-topic/confluent.html" | relative_url }}">Choose the output topic dynamically</a></li>
+            <li><a href="{{ "/filter-a-stream-of-events/confluent.html" | relative_url }}">Filter a stream of events</a></li>
+            <li><a href="{{ "/finding-distinct-events/confluent.html" | relative_url }}">Find distinct events</a></li>
+          </ul>
+          <!--div id="show"><a class="button is-small is-fullwidth">More</a></div-->
+        </div>
+
+        <div class="card">
+          <div class="title">
+            <img src="{{ "/assets/img/icon-hub-spoke.svg"  | relative_url }}" />
+            <div>Manipulate Streams</div>
+            <!-- Working with streams, tables, data formats, and other event-processing operations -->
+          </div>
+          <ul>
+            <li><a href="{{ "/kafka-streams-convert-to-ktable/confluent.html" | relative_url }}">Convert a KStream to a KTable</a></li>
+            <li><a href="{{ "/rekey-a-stream/ksql.html" | relative_url }}">Rekey a stream with a value</a></li>
+            <li><a href="{{ "/rekey-with-function/ksql.html" | relative_url }}">Rekey a stream with a function</a></li>
+            <li><a href="{{ "/naming-stateful-operations/kstreams.html" | relative_url }}">Name stateful operations</a></li>
+            <li><a href="{{ "/handling-deserialization-errors/ksql.html" | relative_url }}">Handle deserialization errors</a></li>
+            <li><a href="{{ "/changing-serialization-format/ksql.html" | relative_url }}">Convert serialization format</a></li>
+            <li><a href="{{ "/kafka-streams-schedule-operations/kstreams.html" | relative_url }}">Scheduling operations</a></li>
+	     <li><a href="{{ "/schedule-ktable-ttl/kstreams.html" | relative_url }}">Expire data in a KTable with TTLs</a></li>
+	     <li><a href="{{ "/schedule-ktable-ttl-aggregate/kstreams.html" | relative_url }}">Expire data in a KTable created from aggregate()</a></li>
+          </ul>
+        </div>
+
+        <div class="card">
+          <div class="title">
+            <img class="icon-aggregate" src="{{ "/assets/img/icon-aggregate.svg" | relative_url }}" />
+            <div>Aggregate data</div>
+            <!-- Implementing stateful operations on events -->
+          </div>
+          <ul>
+            <li><a href="{{ "/create-stateful-aggregation-count/confluent.html" | relative_url }}">Count a stream of events</a></li>
+            <li><a href="{{ "/create-stateful-aggregation-sum/confluent.html" | relative_url }}">Sum a stream of events</a></li>
+            <li><a href="{{ "/create-stateful-aggregation-minmax/ksql.html" | relative_url }}">Find the min/max</a></li>
+            <li><a href="{{ "/aggregating-average/kstreams.html" | relative_url }}">Calculate a running average</a></li>
+            <li><a href="{{ "/cogrouping-streams/confluent.html" | relative_url }}">Cogrouping aggregates</a></li>
+          </ul>
+        </div>
+
+      </div>
+      <!--END 2nd card row -->
+
+      <div class="cards third-card-row">
+
+        <div class="card">
+          <div class="title">
+            <img src="{{ "/assets/img/icon-join.svg" | relative_url }}" />
+            <div>Join data</div>
+            <!-- Combining data from two or more sources based on common keys -->
+          </div>
+          <ul>
+            <li><a href="{{ "/join-a-stream-to-a-table/confluent.html" | relative_url }}">Join a stream and a table</a></li>
+            <li><a href="{{ "/join-a-stream-to-a-stream/ksql.html" | relative_url }}">Join a stream and a stream</a></li>
+            <li><a href="{{ "/join-a-table-to-a-table/ksql.html" | relative_url }}">Join a table and a table</a></li>
+            <li><a href="{{ "/foreign-key-joins/kstreams.html" | relative_url }}">Join two tables with a foreign key</a></li>
+            <li><a href="{{ "/multi-joins/ksql.html" | relative_url }}">Multi-join expressions</a></li>
+            <li><a href="{{ "/versioned-ktables/kstreams.html" | relative_url }}">Using versioned KTables for temporal join accuracy</a></li>
+          </ul>
+        </div>
+
+        <div class="card">
+          <div class="title">
+            <img src="{{ "/assets/img/icon-time.svg" | relative_url }}" />
+            <div>Windowing Operations</div>
+            <!-- Putting stateful operations results into groups based on time-->
+          </div>
+          <ul>
+            <li><a href="{{ "/create-tumbling-windows/confluent.html" | relative_url }}">Tumbling windows</a></li>
+            <li><a href="{{ "/create-session-windows/confluent.html" | relative_url }}">Session windows</a></li>
+            <li><a href="{{ "/create-hopping-windows/ksql.html" | relative_url }}">Hopping windows</a></li>
+            <li><a href="{{ "/sliding-windows/kstreams.html" | relative_url }}">Sliding windows</a></li>
+            <li><a href="{{ "/create-cumulating-windows/flinksql.html" | relative_url }}">Cumulating windows</a></li>
+            <li><a href="{{ "/window-final-result/kstreams.html" | relative_url }}">Emit a final result</a></li>
+            <li><a href="{{ "/anomaly-detection/ksql.html" | relative_url }}">Anomaly detection</a></li>
+            <li><a href="{{ "/time-concepts/ksql.html" | relative_url }}">Event-time semantics</a></li>
+          </ul>
+        </div>
+
+        <div class="card">
+          <div class="title">
+            <img src="{{ "/assets/img/icon-connect.svg" | relative_url }}" />
+            <div>Connect data sources & sinks</div>
+            <!-- Using connectors to read data to Kafka topics and to write data out -->
+          </div>
+          <ul>
+            <li><a href="{{ "/kafka-connect-datagen/confluent.html" | relative_url }}">Generate simple mock Kafka data</a></li>
+            <li><a href="{{ "/generate-streams-of-test-data/ksql.html" | relative_url }}">Generate complex mock Kafka data</a></li>
+            <li><a href="{{ "/connect-add-key-to-source/kstreams.html" | relative_url }}">Add a key to a stream from a JDBC source</a></li>
+            <li><a href="{{ "/connect-sink-timestamp/ksql.html" | relative_url }}">Convert timezone before sending to a database</a></li>
+            <li><a href="{{ "/custom-connector/confluent.html" | relative_url }}">Build and deploy a custom connector on Confluent Cloud</a></li>
+          </ul>
+        </div>
+       </div>
+       <!-- END Third card row-->
+
+       <div class="cards fourth-card-row">
+
+        <div class="card">
+          <div class="title">
+            <img src="{{ "/assets/img/icon-kafka-blue.svg" | relative_url }}" />
+            <div>CLI</div>
+            <!-- Using Apache Kafka and Confluent CLIs to produce and consume events -->
+          </div>
+           <ul>
+            <li><a href="{{ "/kafka-console-consumer-producer-basics/confluent.html" | relative_url }}">Basic Produce and Consume</a></li>
+            <li><a href="{{ "/kafka-console-consumer-producer-avro/confluent.html" | relative_url }}">CLI with (de)serializers</a></li>
+            <li><a href="{{ "/kafka-console-consumer-primitive-keys-values/kafka.html" | relative_url }}">Primitive keys and values</a></li>
+            <li><a href="{{ "/kafka-console-consumer-read-specific-offsets-partitions/confluent.html" | relative_url }}">Read from an offset and partition</a></li>
+          </ul>
+        </div>
+
+         <div class="card">
+          <div class="title">
+            <img src="{{ "/assets/img/icon-function.svg"  | relative_url }}" />
+            <div>Access Fields</div>
+            <!-- Reading fields within a record, and working with JSON -->
+          </div>
+          <ul>
+            <li><a href="{{ "/transform-a-stream-of-events/confluent.html" | relative_url }}">Transform a stream of events</a></li>
+            <li><a href="{{ "/working-with-json-different-structure/ksql.html" | relative_url }}">Heterogenous JSON</a></li>
+            <li><a href="{{ "/working-with-nested-json/ksql.html" | relative_url }}">Nested JSON</a></li>
+            <li><a href="{{ "/flatten-nested-data/ksql.html" | relative_url }}">Flatten deeply nested events</a></li>
+          </ul>
+        </div>
+
+         <div class="card">
+          <div class="title">
+            <img src="{{ "/assets/img/icon-cascade.svg"  | relative_url }}" />
+            <div>Manipulate Values</div>
+            <!-- Implementing stateless operations on events -->
+          </div>
+          <ul>
+            <li><a href="{{ "/udf/ksql.html" | relative_url }}">User-defined functions (UDF)</a></li>
+            <li><a href="{{ "/concatenation/ksql.html" | relative_url }}">Concatenation</a></li>
+            <li><a href="{{ "/masking-data/ksql.html" | relative_url }}">Mask data</a></li>
+            <li><a href="{{ "/column-difference/ksql.html" | relative_url }}">Calculate column difference</a></li>
+            <li><a href="{{ "/geo-distance/ksql.html" | relative_url }}">Calculate lat-long distance</a></li>
+          </ul>
+        </div>
+      </div>
+       <!-- END fourth card row -->
+       <div class="cards fifth-card-row">
+
+        <div class="card card-cta">
+          <div class="title">
+            <div>Be the first to be notified about new tutorials</div>
+            <form id="mktoForm_3977" style="display:none"></form>
+            <div id="mkto-form">
+              <div class="form">
+                <div class="is-hidden">Thank you!</div>
+                <a class="cta-button secondary">Sign Up</a>
+                <form>
+                  <input type="email" placeholder="Enter Email" name="Email" />
+                  <button class="cta-button secondary" type="submit">Submit</button>
+                </form>
+              </div>
+            </div>
+          </div>
+          <div id="signup-notice" class="is-hidden notice">
+            <p>
+              By subscribing you understand we will process your personal information in accordance with our <a href="https://www.confluent.io/privacy">Privacy Statement</a>.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+      <!-- END fifth-card row-->
+    </div>
+
+
+    {% include footer.html %}
+    <script src="{{ "/assets/js/segment.js" | relative_url }}"></script>
+    <script src="{{ "/assets/js/jquery.min.js" | relative_url }}"></script>
+    <script src="{{ "/assets/js/main.js" | relative_url }}"></script>
+    <script src="{{ "/assets/js/nav.js" | relative_url }}"></script>
+    <script src="{{ "/assets/js/scrollDepth.js" | relative_url }}"></script>
+    <script src="//go.confluent.io/js/forms2/js/forms2.min.js"></script>
+    <script src="https://use.fontawesome.com/releases/v5.9.0/js/all.js"></script>
+  </body>
+</html>

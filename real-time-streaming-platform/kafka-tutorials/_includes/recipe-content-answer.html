@@ -1,0 +1,28 @@
+<div class="launch-container">
+
+   {% if site.data.harnesses[page.static_data][page.stack].answer %}
+
+           {% for step in site.data.harnesses[page.static_data][page.stack].answer.steps %}
+
+            <div class="tutorial-try-it-step content">
+            {% if step.title %}
+              <h4 class="subtitle" id="{{ step.title | slugify }}">
+                <div class="text">{{ step.title }}</div>
+              </h4>
+            {% endif %}
+              {% for section in step.content %}
+
+              {% if section.render.skip != true %}
+
+        <div class="ctas" data-swiftype-index="false">
+          <a href="https://www.confluent.io/confluent-cloud/tryfree/?next=tutorials/ksql-recipe-{{ page.static_data }}" class="btn-island">Launch recipe in Confluent Cloud</a>
+        </div>
+
+              {% endif %}
+
+              {% endfor %}
+           </div>
+           {% endfor %}
+   {% endif %}
+
+</div>

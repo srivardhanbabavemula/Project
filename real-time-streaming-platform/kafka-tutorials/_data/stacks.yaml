@@ -1,0 +1,44 @@
+ksql:
+  pretty: ksqlDB
+
+flinksql:
+  pretty: Flink SQL
+
+kstreams:
+  pretty: Kafka Streams
+
+kafka:
+  pretty: Kafka
+
+confluent:
+  pretty: Confluent
+
+# use for the produce-consume-lang tutorial only
+c:
+  pretty: C
+clojure:
+  pretty: Clojure
+csharp:
+  pretty: C-Sharp/.NET
+go:
+  pretty: Go
+groovy:
+  pretty: Groovy
+java:
+  pretty: Java
+javaspring:
+  pretty: Java Spring
+kotlin:
+  pretty: Kotlin
+nodejs:
+  pretty: Node.js
+python:
+  pretty: Python
+ruby:
+  pretty: Ruby
+rust:
+  pretty: Rust
+scala:
+  pretty: Scala Lang
+swift:
+  pretty: Apple Swift

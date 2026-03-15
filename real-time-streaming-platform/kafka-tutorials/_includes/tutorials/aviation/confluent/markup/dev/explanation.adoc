@@ -1,0 +1,146 @@
+### Create and populate the underlying tables
+
+ksqlDB supports tables and streams as objects. Both are backed by Kafka topics. Here we're going to create three tables in a normalized data model to hold information about our customers, their bookings, and the flights. 
+
+First off, let's create a table that will hold data about our customers: 
+
+++++
+<pre class="snippet"><code class="sql">{% include_raw tutorials/aviation/confluent/code/tutorial-steps/dev/c01.sql %}</code></pre>
+++++
+
+This will store the data in a Kafka topic. In practice, you would probably populate this directly from your application or a feed from your database using Kafka Connect. For simplicity, here we'll just load some data directly: 
+
+[source,sql]
+----
+INSERT INTO customers (id, name, address, email, phone, loyalty_status, loyalty_id) VALUES (1, 'Gleda Lealle', '93 Express Point', 'glealle0@senate.gov', '+351 831 301 6746', 'Silver', '2PLNX338063');
+INSERT INTO customers (id, name, address, email, phone, loyalty_status, loyalty_id) VALUES (2, 'Gilly Crocombe', '332 Blaine Avenue', 'gcrocombe1@homestead.com', '+33 203 565 3736', 'Silver', '7AWLM918339');
+INSERT INTO customers (id, name, address, email, phone, loyalty_status, loyalty_id) VALUES (3, 'Astrix Aspall', '56 Randy Place', 'aaspall2@ebay.co.uk', '+33 679 296 6645', 'Gold', '3RNZH870911');
+INSERT INTO customers (id, name, address, email, phone, loyalty_status, loyalty_id) VALUES (4, 'Ker Omond', '23255 Tennessee Court', 'komond3@usnews.com', '+33 515 323 0170', 'Silver', '5BWEP418137');
+INSERT INTO customers (id, name, address, email, phone, loyalty_status, loyalty_id) VALUES (5, 'Arline Synnott', '144 Ramsey Avenue', 'asynnott4@theatlantic.com', '+62 953 759 8885', 'Bronze', '4MNJB877136');
+----
+
+Next, we'll create a table of flights and associated bookings for our customers. 
+
+++++
+<pre class="snippet"><code class="sql">{% include_raw tutorials/aviation/confluent/code/tutorial-steps/dev/c02.sql %}</code></pre>
+++++
+
+For these two tables, let's add some data. As before, this would usually come directly from your application or a stream of data from another system integrated through Kafka Connect. 
+
+[source,sql]
+----
+INSERT INTO flights (id, origin, destination, code, scheduled_dep, scheduled_arr) VALUES (1, 'LBA', 'AMS', '642',  '2021-11-18T06:04:00', '2021-11-18T06:48:00');
+INSERT INTO flights (id, origin, destination, code, scheduled_dep, scheduled_arr) VALUES (2, 'LBA', 'LHR', '9607', '2021-11-18T07:36:00', '2021-11-18T08:05:00');
+INSERT INTO flights (id, origin, destination, code, scheduled_dep, scheduled_arr) VALUES (3, 'AMS', 'TXL', '7968', '2021-11-18T08:11:00', '2021-11-18T10:41:00');
+INSERT INTO flights (id, origin, destination, code, scheduled_dep, scheduled_arr) VALUES (4, 'AMS', 'OSL', '496',  '2021-11-18T11:20:00', '2021-11-18T13:25:00');
+INSERT INTO flights (id, origin, destination, code, scheduled_dep, scheduled_arr) VALUES (5, 'LHR', 'JFK', '9230', '2021-11-18T10:36:00', '2021-11-18T19:07:00');
+
+INSERT INTO bookings (id, customer_id, flight_id) VALUES (1,2,1);
+INSERT INTO bookings (id, customer_id, flight_id) VALUES (2,1,1);
+INSERT INTO bookings (id, customer_id, flight_id) VALUES (3,5,3);
+INSERT INTO bookings (id, customer_id, flight_id) VALUES (4,4,2);
+----
+
+### Denormalize the data
+
+To give us a single view of the passenger/flight data, we'll denormalize down the three tables into one. First, we join the customers to bookings that they've made and build a new table as a result: 
+
+++++
+<pre class="snippet"><code class="sql">
+{% include_raw tutorials/aviation/confluent/code/tutorial-steps/dev/o01.sql %}
+{% include_raw tutorials/aviation/confluent/code/tutorial-steps/dev/j01.sql %}
+</code></pre>
+++++
+
+From here, we join to details of the flights themselves: 
+
+++++
+<pre class="snippet"><code class="sql">
+{% include_raw tutorials/aviation/confluent/code/tutorial-steps/dev/o01.sql %}
+{% include_raw tutorials/aviation/confluent/code/tutorial-steps/dev/j02.sql %}
+</code></pre>
+++++
+
+At this stage, we can query the data held in the tables to show which customers are booked on which flights: 
+
+++++
+<pre class="snippet"><code class="sql">{% include_raw tutorials/aviation/confluent/code/tutorial-steps/dev/o01.sql %}</code></pre>
+++++
+
+[source,sql]
+----
+SELECT cb_c_name           AS name,
+       cb_c_email          AS email,
+       cb_c_loyalty_status AS loyalty_status,
+       cb_c_loyalty_id     AS loyalty_id,
+       f_origin            AS origin,
+       f_destination       AS destination,
+       f_code              AS code,
+       f_scheduled_dep     AS scheduled_dep
+FROM customer_flights
+EMIT CHANGES;      
+----
+
+[source,text]
+----
++-------------------------+-------------------------+-------------------------+-------------------------+-------------------------+-------------------------+-------------------------+-------------------------+
+|NAME                     |EMAIL                    |LOYALTY_STATUS           |LOYALTY_ID               |ORIGIN                   |DESTINATION              |CODE                     |SCHEDULED_DEP            |
++-------------------------+-------------------------+-------------------------+-------------------------+-------------------------+-------------------------+-------------------------+-------------------------+
+|Arline Synnott           |asynnott4@theatlantic.com|Bronze                   |4MNJB877136              |AMS                      |TXL                      |7968                     |2021-11-18T08:11:00.000  |
+|Gleda Lealle             |glealle0@senate.gov      |Silver                   |2PLNX338063              |LBA                      |AMS                      |642                      |2021-11-18T06:04:00.000  |
+|Ker Omond                |komond3@usnews.com       |Silver                   |5BWEP418137              |LBA                      |LHR                      |9607                     |2021-11-18T07:36:00.000  |
+|Gilly Crocombe           |gcrocombe1@homestead.com |Silver                   |7AWLM918339              |LBA                      |AMS                      |642                      |2021-11-18T06:04:00.000  |
+----
+
+The last step in denormalizing the data is to set the key of the customer flights table to that of the flight ID so that it can be joined to the flight updates (which we'll get to below). 
+This is currently a multi-step process, see link:https://github.com/confluentinc/ksql/issues/2356[details].
+One additional transformation during the repartitioning is the partial masking of the customer loyalty ID to protect sensitive data.
+
+++++
+<pre class="snippet"><code class="sql">
+{% include_raw tutorials/aviation/confluent/code/tutorial-steps/dev/o01.sql %}
+{% include_raw tutorials/aviation/confluent/code/tutorial-steps/dev/r01.sql %}
+</code></pre>
+++++
+
+We now have the customer flights table as before, but keyed on `flight_id`. 
+
+### Add a stream of flight updates
+
+In the `flights` table above, we have the scheduled departure time of a flight (`SCHEDULED_DEP`). Now, let's introduce a stream of events that any flight changes will be written to. Again, we're populating it directly, but in the real world it'll be coming from somewhere else—perhaps Kafka Connect pulling the data from a JMS queue (or any of the other link:https://hub.confluent.io[hundreds of supported sources]). 
+
+++++
+<pre class="snippet"><code class="sql">{% include_raw tutorials/aviation/confluent/code/tutorial-steps/dev/c03.sql %}</code></pre>
+++++
+
+### Join data
+
+By joining between our customer flight booking data and any flight updates, we can provide a stream of notifications to passengers. Many platforms exist for providing the push notification, whether bespoke in app or using a link:https://www.confluent.io/blog/building-a-telegram-bot-powered-by-kafka-and-ksqldb/[third-party messaging tool]. ksqlDB can integrate with these using its link:https://docs.ksqldb.io/en/latest/developer-guide/api/[REST interface], native link:https://docs.ksqldb.io/en/latest/developer-guide/ksqldb-clients/java-client/[Java client], or one of the several https://docs.ksqldb.io/en/0.22.0-ksqldb/developer-guide/ksqldb-clients/[community-supported clients]. 
+
+In one ksqlDB window, run the following ksqlDB query to return customer details with flight updates. This is the same query that you would run from your application, and it runs continuously. 
+
+++++
+<pre class="snippet"><code class="sql">{% include_raw tutorials/aviation/confluent/code/tutorial-steps/dev/p01.sql %}</code></pre>
+++++
+
+In another ksqlDB window, add some data to the flight update stream: 
+
+[source,sql]
+----
+INSERT INTO flight_updates (id, flight_id, updated_dep, reason) VALUES (1, 2, '2021-11-18T09:00:00.000', 'Cabin staff unavailable');
+INSERT INTO flight_updates (id, flight_id, updated_dep, reason) VALUES (2, 3, '2021-11-19T14:00:00.000', 'Mechanical checks');
+INSERT INTO flight_updates (id, flight_id, updated_dep, reason) VALUES (3, 1, '2021-11-19T08:10:09.000', 'Icy conditions');
+----
+
+In the original window, you will see the details of which passengers are impacted by which flight changes, as shown below.
+Notice that the customer loyalty IDs are partially masked.
+
+[source,text]
+----
++---------------+------------------------+--------------------+----------------------+---------------------+---------------------------+------------------+-------------------+------------+
+|customer_name  |flight_change_reason    |flight_updated_dep  |flight_scheduled_dep  |customer_loyalty_id  |customer_email             |customer_phone    |flight_destination |flight_code |
++---------------+------------------------+--------------------+----------------------+---------------------+---------------------------+------------------+-------------------+------------+
+|Gleda Lealle   |Icy conditions          |2021-11-19T08:10:09 |2021-11-18T06:04:00   |nXXXXnnn063          |glealle0@senate.gov        |+351 831 301 6746 |AMS                |642         |
+|Ker Omond      |Cabin staff unavailable |2021-11-18T09:00:00 |2021-11-18T07:36:00   |nXXXXnnn137          |komond3@usnews.com         |+33 515 323 0170  |LHR                |9607        |
+|Arline Synnott |Mechanical checks       |2021-11-19T14:00:00 |2021-11-18T08:11:00   |nXXXXnnn136          |asynnott4@theatlantic.com  |+62 953 759 8885  |TXL                |7968        |
+----

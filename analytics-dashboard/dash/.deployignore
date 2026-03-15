@@ -1,0 +1,11 @@
+# these apps are ignored for deployment
+dash-summarize
+dash-translate
+dash-cuml-umap
+dash-chatbot
+dash-translate
+dash-image-enhancing
+dash-mapd-demo
+dash-gpt3-chatbot
+dash-fashion-mnist-explorer
+cytoscape-editor
