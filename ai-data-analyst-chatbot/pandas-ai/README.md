@@ -193,11 +193,5 @@ If you are interested in managed PandasAI Cloud or self-hosted Enterprise Offeri
 - [Examples](examples) for example notebooks
 - [Discord](https://discord.gg/KYKj9F2FRH) for discussion with the community and PandasAI team
 
-## 🤝 Contributing
-
-Contributions are welcome! Please check the outstanding issues and feel free to open a pull request.
-For more information, please check out the [contributing guidelines](CONTRIBUTING.md).
 
 ### Thank you!
-
-[![Contributors](https://contrib.rocks/image?repo=sinaptik-ai/pandas-ai)](https://github.com/sinaptik-ai/pandas-ai/graphs/contributors)
