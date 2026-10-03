@@ -1,0 +1,14 @@
+apiVersion: v2
+name: fraud-guard
+description: Real-time payment fraud detection platform with Kafka, Spark, FastAPI, and XGBoost
+type: application
+version: 0.1.0
+appVersion: "1.0.0"
+keywords:
+  - fraud-detection
+  - machine-learning
+  - kafka
+  - spark
+  - fastapi
+maintainers:
+  - name: Fraud Guard Team

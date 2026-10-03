@@ -1,0 +1,93 @@
+[build-system]
+requires = ["setuptools>=77", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "langgraph-fastapi-starter"
+version = "0.1.0"
+description = "Open-source LangGraph and FastAPI starter for stateful AI agent APIs with PostgreSQL, pgvector, auth, migrations, Docker, and tests."
+readme = "README.md"
+license = "MIT"
+license-files = ["LICENSE"]
+authors = [
+    { name = "Ignazio De Santis", email = "ignaziodesantisofficial@gmail.com" },
+]
+requires-python = ">=3.11"
+keywords = [
+    "ai-agents",
+    "agentic-ai",
+    "fastapi",
+    "langchain",
+    "langgraph",
+    "llm",
+    "open-source",
+    "pgvector",
+    "postgresql",
+    "rag",
+]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Framework :: FastAPI",
+    "Intended Audience :: Developers",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.11",
+    "Topic :: Internet :: WWW/HTTP :: HTTP Servers",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+    "Typing :: Typed",
+]
+dependencies = [
+    "fastapi>=0.111",
+    "uvicorn[standard]>=0.30",
+    "pydantic>=2.7",
+    "pydantic-settings>=2.3",
+    "psycopg2-binary>=2.9",
+    "alembic>=1.13",
+    "langgraph>=0.2",
+    "langchain>=0.2",
+    "langchain-openai>=0.1",
+    "langchain-community>=0.2",
+    "tavily-python>=0.5",
+    "bcrypt>=4.1",
+    "python-multipart>=0.0.9",
+]
+
+[project.urls]
+Homepage = "https://github.com/IgnazioDS/langgraph-fastapi-starter"
+Documentation = "https://github.com/IgnazioDS/langgraph-fastapi-starter#readme"
+Source = "https://github.com/IgnazioDS/langgraph-fastapi-starter"
+Issues = "https://github.com/IgnazioDS/langgraph-fastapi-starter/issues"
+Discussions = "https://github.com/IgnazioDS/langgraph-fastapi-starter/discussions"
+Changelog = "https://github.com/IgnazioDS/langgraph-fastapi-starter/releases"
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.2",
+    "pytest-asyncio>=0.23",
+    "httpx>=0.27",
+    "pytest-mock>=3.14",
+    "ruff>=0.4",
+    "mypy>=1.10",
+]
+prod = [
+    "gunicorn>=22.0",
+]
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["app*"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B", "ASYNC"]
+
+[tool.mypy]
+python_version = "3.11"
+strict = true
+ignore_missing_imports = true
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+testpaths = ["tests"]

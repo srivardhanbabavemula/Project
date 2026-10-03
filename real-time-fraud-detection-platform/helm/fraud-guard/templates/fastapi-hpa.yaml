@@ -1,0 +1,22 @@
+{{- if .Values.fastapi.hpa.enabled }}
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: {{ include "fraud-guard.fastapiService" . }}
+  labels:
+    {{- include "fraud-guard.labels" . | nindent 4 }}
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: {{ include "fraud-guard.fastapiService" . }}
+  minReplicas: {{ .Values.fastapi.hpa.minReplicas }}
+  maxReplicas: {{ .Values.fastapi.hpa.maxReplicas }}
+  metrics:
+    - type: Resource
+      resource:
+        name: cpu
+        target:
+          type: Utilization
+          averageUtilization: {{ .Values.fastapi.hpa.targetCPUUtilization }}
+{{- end }}

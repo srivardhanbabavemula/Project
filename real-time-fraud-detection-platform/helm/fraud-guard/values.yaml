@@ -1,0 +1,173 @@
+# -- Global settings
+global:
+  namespace: fraud-guard
+
+# -- FastAPI serving
+fastapi:
+  image:
+    repository: fraud-guard/api
+    tag: latest
+    pullPolicy: IfNotPresent
+  replicaCount: 2
+  service:
+    type: ClusterIP
+    port: 8000
+  hpa:
+    enabled: true
+    minReplicas: 2
+    maxReplicas: 5
+    targetCPUUtilization: 70
+  resources:
+    requests:
+      cpu: 250m
+      memory: 256Mi
+    limits:
+      cpu: 500m
+      memory: 512Mi
+  probes:
+    liveness:
+      path: /health
+      initialDelaySeconds: 30
+      periodSeconds: 15
+      failureThreshold: 3
+    readiness:
+      path: /health
+      initialDelaySeconds: 15
+      periodSeconds: 10
+      failureThreshold: 3
+
+# -- Kafka (KRaft mode, single node)
+kafka:
+  image:
+    repository: confluentinc/cp-kafka
+    tag: "7.5.0"
+  replicaCount: 1
+  service:
+    port: 9092
+    externalPort: 19092
+  storage:
+    size: 5Gi
+    storageClass: ""
+  resources:
+    requests:
+      cpu: 250m
+      memory: 512Mi
+    limits:
+      cpu: 500m
+      memory: 1Gi
+  config:
+    clusterId: "MkU3OEVBNTcwNTJENDM2Qk"
+    topicReplicationFactor: 1
+
+# -- PostgreSQL
+postgres:
+  image:
+    repository: postgres
+    tag: "15-alpine"
+  service:
+    port: 5432
+  storage:
+    size: 10Gi
+    storageClass: ""
+  resources:
+    requests:
+      cpu: 250m
+      memory: 256Mi
+    limits:
+      cpu: 500m
+      memory: 512Mi
+  auth:
+    database: fraud_detection
+    username: frauduser
+    # Overridden via Secret; this is the default for local dev
+    password: fraudpass123
+
+# -- Spark streaming
+spark:
+  master:
+    image:
+      repository: apache/spark
+      tag: "3.5.0"
+    service:
+      port: 7077
+      webPort: 8080
+    resources:
+      requests:
+        cpu: 250m
+        memory: 512Mi
+      limits:
+        cpu: 500m
+        memory: 1Gi
+  worker:
+    image:
+      repository: apache/spark
+      tag: "3.5.0"
+    replicaCount: 1
+    resources:
+      requests:
+        cpu: 500m
+        memory: 1Gi
+      limits:
+        cpu: "1"
+        memory: 2Gi
+    config:
+      memory: 2G
+      cores: 2
+
+# -- Prometheus
+prometheus:
+  image:
+    repository: prom/prometheus
+    tag: "v2.48.1"
+  service:
+    port: 9090
+  storage:
+    size: 5Gi
+    storageClass: ""
+  resources:
+    requests:
+      cpu: 100m
+      memory: 256Mi
+    limits:
+      cpu: 250m
+      memory: 512Mi
+
+# -- Grafana
+grafana:
+  image:
+    repository: grafana/grafana
+    tag: "10.2.3"
+  service:
+    type: ClusterIP
+    port: 3000
+  resources:
+    requests:
+      cpu: 100m
+      memory: 128Mi
+    limits:
+      cpu: 250m
+      memory: 256Mi
+  auth:
+    adminUser: admin
+    # Overridden via Secret
+    adminPassword: admin
+
+# -- Ingress
+ingress:
+  enabled: true
+  className: nginx
+  host: fraud-guard.example.com
+  tls:
+    enabled: true
+    secretName: fraud-guard-tls
+  certManager:
+    clusterIssuer: letsencrypt-prod
+  annotations: {}
+
+# -- Environment / feature flags
+config:
+  kafkaBootstrapServers: "fraud-guard-kafka:9092"
+  kafkaTopic: "payment-transactions"
+  modelThresholdDecline: "0.8"
+  modelThresholdReview: "0.5"
+  modelThresholdLowRisk: "0.2"

@@ -1,0 +1,90 @@
+name: MLOps Pipeline
+
+on:
+  schedule:
+    - cron: "0 0 * * 0" # Weekly on Sunday at midnight
+  push:
+    branches:
+      - main
+    paths:
+      - 'ml/**'
+      - 'feature_store/**'
+  workflow_dispatch:
+
+jobs:
+  train-and-evaluate:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:15-alpine
+        env:
+          POSTGRES_USER: frauduser
+          POSTGRES_PASSWORD: fraudpass123
+          POSTGRES_DB: fraud_detection
+        ports:
+          - 5433:5432
+        options: >-
+          --health-cmd "pg_isready -U frauduser -d fraud_detection"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+      
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
+          
+      - name: Install Dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          
+      - name: Initialize Database
+        run: |
+          # Use the schema to create tables. The postgres service in GHA is accessible via localhost.
+          PGPASSWORD=fraudpass123 psql -h localhost -p 5433 -U frauduser -d fraud_detection -f feature_store/schema.sql
+          
+      - name: Train and Stage Challenger Model
+        env:
+          DB_HOST: localhost
+          DB_PORT: 5433
+          DB_USER: frauduser
+          DB_PASSWORD: fraudpass123
+          DB_NAME: fraud_detection
+        run: |
+          # Train model and register as challenger. 
+          # This acts as our CI/CD gate: it only promotes to challenger if training and eval succeed.
+          python ml/train_model.py --samples 50000 --stage challenger
+          
+      - name: Automatically Start A/B Experiment
+        env:
+          DB_HOST: localhost
+          DB_PORT: 5433
+          DB_USER: frauduser
+          DB_PASSWORD: fraudpass123
+          DB_NAME: fraud_detection
+        run: |
+          python -c "
+          import sys
+          from pathlib import Path
+          sys.path.append(str(Path.cwd()))
+          from ml.registry import ModelRegistry, STAGE_CHALLENGER
+          
+          registry = ModelRegistry()
+          challenger_version = registry.get_version_for_stage(STAGE_CHALLENGER)
+          if challenger_version:
+              try:
+                  # This will route 10% of traffic to the new challenger
+                  registry.start_experiment(
+                      challenger_version=challenger_version, 
+                      traffic_pct=0.1, 
+                      description='Automated CI/CD Challenger Deployment'
+                  )
+                  print(f'Started A/B Experiment for new challenger: {challenger_version}')
+              except Exception as e:
+                  print(f'Could not start experiment (perhaps no production champion exists yet): {e}')
+          "

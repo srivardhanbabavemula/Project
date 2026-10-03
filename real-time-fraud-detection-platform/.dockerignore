@@ -1,0 +1,16 @@
+venv/
+__pycache__/
+*.pyc
+.git/
+.gitignore
+*.md
+helm/
+tests/
+scripts/
+monitoring/
+docker-compose.yml
+.env
+*.log
+ml/models/*.pkl
+ml/models/*.json
+.cursor/

@@ -1,0 +1,62 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "fraud-guard.fastapiService" . }}
+  labels:
+    {{- include "fraud-guard.labels" . | nindent 4 }}
+    {{- include "fraud-guard.selectorLabels" (dict "context" . "component" "fastapi") | nindent 4 }}
+spec:
+  replicas: {{ .Values.fastapi.replicaCount }}
+  selector:
+    matchLabels:
+      {{- include "fraud-guard.selectorLabels" (dict "context" . "component" "fastapi") | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- include "fraud-guard.labels" . | nindent 8 }}
+        {{- include "fraud-guard.selectorLabels" (dict "context" . "component" "fastapi") | nindent 8 }}
+    spec:
+      initContainers:
+        - name: wait-for-postgres
+          image: busybox:1.36
+          command:
+            - sh
+            - -c
+            - |
+              until nc -z {{ include "fraud-guard.postgresService" . }} {{ .Values.postgres.service.port }}; do
+                echo "Waiting for PostgreSQL..."
+                sleep 2
+              done
+      containers:
+        - name: fastapi
+          image: "{{ .Values.fastapi.image.repository }}:{{ .Values.fastapi.image.tag }}"
+          imagePullPolicy: {{ .Values.fastapi.image.pullPolicy }}
+          ports:
+            - name: http
+              containerPort: 8000
+              protocol: TCP
+          envFrom:
+            - configMapRef:
+                name: {{ include "fraud-guard.fullname" . }}-config
+          env:
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "fraud-guard.fullname" . }}-secret
+                  key: DB_PASSWORD
+          livenessProbe:
+            httpGet:
+              path: {{ .Values.fastapi.probes.liveness.path }}
+              port: 8000
+            initialDelaySeconds: {{ .Values.fastapi.probes.liveness.initialDelaySeconds }}
+            periodSeconds: {{ .Values.fastapi.probes.liveness.periodSeconds }}
+            failureThreshold: {{ .Values.fastapi.probes.liveness.failureThreshold }}
+          readinessProbe:
+            httpGet:
+              path: {{ .Values.fastapi.probes.readiness.path }}
+              port: 8000
+            initialDelaySeconds: {{ .Values.fastapi.probes.readiness.initialDelaySeconds }}
+            periodSeconds: {{ .Values.fastapi.probes.readiness.periodSeconds }}
+            failureThreshold: {{ .Values.fastapi.probes.readiness.failureThreshold }}
+          resources:
+            {{- toYaml .Values.fastapi.resources | nindent 12 }}

@@ -1,0 +1,18 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "fraud-guard.fullname" . }}-config
+  labels:
+    {{- include "fraud-guard.labels" . | nindent 4 }}
+data:
+  DB_HOST: {{ include "fraud-guard.postgresService" . | quote }}
+  DB_PORT: {{ .Values.postgres.service.port | quote }}
+  DB_NAME: {{ .Values.postgres.auth.database | quote }}
+  DB_USER: {{ .Values.postgres.auth.username | quote }}
+  KAFKA_BOOTSTRAP_SERVERS: "{{ include "fraud-guard.kafkaService" . }}:{{ .Values.kafka.service.port }}"
+  KAFKA_TOPIC: {{ .Values.config.kafkaTopic | quote }}
+  MODEL_THRESHOLD_DECLINE: {{ .Values.config.modelThresholdDecline | quote }}
+  MODEL_THRESHOLD_REVIEW: {{ .Values.config.modelThresholdReview | quote }}
+  MODEL_THRESHOLD_LOW_RISK: {{ .Values.config.modelThresholdLowRisk | quote }}
+  SPARK_MASTER_URL: "spark://{{ include "fraud-guard.sparkMasterService" . }}:{{ .Values.spark.master.service.port }}"
+  PROMETHEUS_URL: "http://{{ include "fraud-guard.prometheusService" . }}:{{ .Values.prometheus.service.port }}"

@@ -1,0 +1,90 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "fraud-guard.sparkMasterService" . }}
+  labels:
+    {{- include "fraud-guard.labels" . | nindent 4 }}
+    {{- include "fraud-guard.selectorLabels" (dict "context" . "component" "spark-master") | nindent 4 }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      {{- include "fraud-guard.selectorLabels" (dict "context" . "component" "spark-master") | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- include "fraud-guard.labels" . | nindent 8 }}
+        {{- include "fraud-guard.selectorLabels" (dict "context" . "component" "spark-master") | nindent 8 }}
+    spec:
+      containers:
+        - name: spark-master
+          image: "{{ .Values.spark.master.image.repository }}:{{ .Values.spark.master.image.tag }}"
+          command: ["/opt/spark/bin/spark-class", "org.apache.spark.deploy.master.Master"]
+          ports:
+            - name: master
+              containerPort: 7077
+            - name: web-ui
+              containerPort: 8080
+          env:
+            - name: SPARK_NO_DAEMONIZE
+              value: "true"
+          readinessProbe:
+            httpGet:
+              path: /
+              port: 8080
+            initialDelaySeconds: 20
+            periodSeconds: 10
+          livenessProbe:
+            httpGet:
+              path: /
+              port: 8080
+            initialDelaySeconds: 30
+            periodSeconds: 15
+          resources:
+            {{- toYaml .Values.spark.master.resources | nindent 12 }}
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "fraud-guard.fullname" . }}-spark-worker
+  labels:
+    {{- include "fraud-guard.labels" . | nindent 4 }}
+    {{- include "fraud-guard.selectorLabels" (dict "context" . "component" "spark-worker") | nindent 4 }}
+spec:
+  replicas: {{ .Values.spark.worker.replicaCount }}
+  selector:
+    matchLabels:
+      {{- include "fraud-guard.selectorLabels" (dict "context" . "component" "spark-worker") | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- include "fraud-guard.labels" . | nindent 8 }}
+        {{- include "fraud-guard.selectorLabels" (dict "context" . "component" "spark-worker") | nindent 8 }}
+    spec:
+      initContainers:
+        - name: wait-for-master
+          image: busybox:1.36
+          command:
+            - sh
+            - -c
+            - |
+              until nc -z {{ include "fraud-guard.sparkMasterService" . }} {{ .Values.spark.master.service.port }}; do
+                echo "Waiting for Spark master..."
+                sleep 2
+              done
+      containers:
+        - name: spark-worker
+          image: "{{ .Values.spark.worker.image.repository }}:{{ .Values.spark.worker.image.tag }}"
+          command:
+            - /opt/spark/bin/spark-class
+            - org.apache.spark.deploy.worker.Worker
+            - "spark://{{ include "fraud-guard.sparkMasterService" . }}:{{ .Values.spark.master.service.port }}"
+          env:
+            - name: SPARK_NO_DAEMONIZE
+              value: "true"
+            - name: SPARK_WORKER_MEMORY
+              value: {{ .Values.spark.worker.config.memory | quote }}
+            - name: SPARK_WORKER_CORES
+              value: {{ .Values.spark.worker.config.cores | quote }}
+          resources:
+            {{- toYaml .Values.spark.worker.resources | nindent 12 }}

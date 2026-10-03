@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "fraud-guard.prometheusService" . }}
+  labels:
+    {{- include "fraud-guard.labels" . | nindent 4 }}
+    {{- include "fraud-guard.selectorLabels" (dict "context" . "component" "prometheus") | nindent 4 }}
+spec:
+  type: ClusterIP
+  ports:
+    - port: {{ .Values.prometheus.service.port }}
+      targetPort: 9090
+      protocol: TCP
+      name: http
+  selector:
+    {{- include "fraud-guard.selectorLabels" (dict "context" . "component" "prometheus") | nindent 4 }}
